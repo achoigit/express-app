@@ -24,3 +24,18 @@ jobs:
         with:
           push: true
           tags: andychoi20170803/express-app:latest
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+
+      - name: Deploy to Azure Container Instances
+        uses: azure/aci-deploy@v1
+        with:
+          resource-group: ${{ secrets.RESOURCE_GROUP }}
+          dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+          image: andychoi20170803/express-app:latest
+          registry-login-server: hub.docker.com
+          registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          name: express-app
+          location: 'east us'
